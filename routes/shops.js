@@ -3,15 +3,15 @@ const router = express.Router();
 
 const reservationRouter = require("./reservations");
 
-const {getShop,getShops,postShop,putShop,deleteShop} = require("../controllers/shops");
+const {getShop,getShops,createShop,updateShop,deleteShop} = require("../controllers/shops");
 
 const {protect,authorize} = require("../middleware/auth");
 
 //go to reservation router
 router.use("/:shopId/reservations/", protect, authorize("admin","shopkeeper"),reservationRouter);
 
-router.route("/").get(getShops).post(protect, authorize("admin","shopkeeper"), postShop);
-router.route("/:id").put(protect, authorize("admin","shopkeeper"), putShop).get(getShop).delete(protect, authorize("admin","shopkeeper"), deleteShop);
+router.route("/").get(getShops).post(protect, authorize("admin","shopkeeper"), createShop);
+router.route("/:id").put(protect, authorize("admin","shopkeeper"), updateShop).get(getShop).delete(protect, authorize("admin","shopkeeper"), deleteShop);
 
 /**
  *  @swagger

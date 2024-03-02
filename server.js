@@ -20,6 +20,7 @@ dotenv.config({path: "./config/config.env"});
 //import router file
 const auth = require("./routes/auth");
 const reservations = require("./routes/reservations");
+const shops = require('./routes/shops');
 
 const app = express();
 app.use(express.json());
@@ -57,7 +58,8 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //routes
 app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs));
-app.use("/api/v1/auth",auth)
+app.use("/api/v1/shops",shops);
+app.use("/api/v1/auth",auth);
 app.use("/api/v1/reservations",reservations);
 
 const PORT = process.env.PORT || 5000;
