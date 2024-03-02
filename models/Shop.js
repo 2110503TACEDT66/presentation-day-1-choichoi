@@ -17,12 +17,12 @@ const ShopSchema = new mongoose.Schema({
         require: [true, 'Please add a telephone number']
     },
     open_time: {
-        type: Int32Array,
+        type: Number,
         require: [true, 'Please add a open-time']
 
     },
     close_time: {
-        type: Int32Array,
+        type: Number,
         require: [true, 'Please add a close-time']
     }
 },{
