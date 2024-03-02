@@ -1,9 +1,9 @@
-const Hospital = require('../models/Hospital');
-const vacCenter = require('../models/VacCenter');
-//@desc Get all hospitals
-//@route GET /api/v1/hospitals
+const Shop = require('../models/Shop');
+//const vacCenter = require('../models/VacCenter');
+//@desc Get all shops
+//@route GET /api/v1/shops
 //@access Public
-exports.getHospitials= async (req,res,next)=>
+exports.getShops= async (req,res,next)=>
 {
     let query;
     const reqQuery = {...req.query};
@@ -14,7 +14,7 @@ exports.getHospitials= async (req,res,next)=>
     let queryStr=JSON.stringify(reqQuery);
     queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match=>`$${match}`);
         
-    query=Hospital.find(JSON.parse(queryStr)).populate('appointments');
+    query=Shop.find(JSON.parse(queryStr)).populate('reservations');
 
     if(req.query.select)
     {
@@ -36,10 +36,10 @@ exports.getHospitials= async (req,res,next)=>
     
     try
     {
-        const total = await Hospital.countDocuments();
+        const total = await Shop.countDocuments();
         query=query.skip(startIndex).limit(limit);
 
-        const hospitals = await query;
+        const shops = await query;
 
         const pagination = {};
 
@@ -61,62 +61,62 @@ exports.getHospitials= async (req,res,next)=>
             }
         }
 
-        res.status(200).json({success:true,cout:hospitals.length, pagination, data:hospitals})
+        res.status(200).json({success:true,cout:shops.length, pagination, data:shops})
     }catch(err)
     {
         res.status(400).json({success:false});
     }
 }
 
-//@desc Get hospital
-//@route GET /api/v1/hospitals/:id
+//@desc Get shop
+//@route GET /api/v1/shops/:id
 //@access Public
-exports.getHospitial= async (req,res,next)=>
+exports.getShop= async (req,res,next)=>
 {
     try
     {
-        const hospital = await Hospital.findById(req.params.id);
+        const shop = await Shop.findById(req.params.id);
 
-        if(!hospital)
+        if(!shop)
         {
             return res.status(400).json({success:false});
         }
-       res.status(200).json({success:true,data:hospital});
+       res.status(200).json({success:true,data:shop});
     }catch(err)
     {
         res.status(400).json({success:false});
     }
 }
 
-//@desc Create a hospital
-//@route POST /api/v1/hospitals
+//@desc Create a shop
+//@route POST /api/v1/shops
 //@access Private
-exports.createHospitial= async (req,res,next)=>
+exports.createShop= async (req,res,next)=>
 {
     console.log(req.body);
-    const hospital = await Hospital.create(req.body);
+    const shop = await Shop.create(req.body);
     res.status(201).json(
         {
-            success:true, data:hospital
+            success:true, data:shop
         })
 }
 
-//@desc Update a hospital
-//@route PUT /api/v1/hospitals/:id
+//@desc Update a shop
+//@route PUT /api/v1/shops/:id
 //@access Private
-exports.updateHospitial= async (req,res,next)=>
+exports.updateShop= async (req,res,next)=>
 {
     try{
-        const hospital = await Hospital.findByIdAndUpdate(req.params.id, req.body,
+        const shop = await Shop.findByIdAndUpdate(req.params.id, req.body,
         {
             new: true,
             runValidators: true
         });
-        if(!hospital)
+        if(!shop)
         {
             return res.status(400).json({success:false});
         }
-        res.status(200).json({success:true, data:hospital});
+        res.status(200).json({success:true, data:shop});
     
     }catch(err)
     {
@@ -125,20 +125,20 @@ exports.updateHospitial= async (req,res,next)=>
 
 }
 
-//@desc Delete a hospital
-//@route POST /api/v1/hospitals/:id
+//@desc Delete a shop
+//@route POST /api/v1/shops/:id
 //@access Private
-exports.deleteHospitial= async(req,res,next)=>
+exports.deleteShop= async(req,res,next)=>
 {
     try
     {
-        const hospital = await Hospital.findById(req.params.id);
+        const shop = await Shop.findById(req.params.id);
 
-        if(!hospital)
+        if(!shop)
         {
             return res.status(404).json({success:false,message:`Bootcamp not found with id of ${req.params.id}`});
         }
-        await hospital.deleteOne();
+        await shop.deleteOne();
         res.status(200).json({success:true, data:{}});
     }catch(err)
     {
@@ -147,7 +147,7 @@ exports.deleteHospitial= async(req,res,next)=>
     }
 }
 
-exports.getVacCenters=(req,res,next)=>
+/** exports.getVacCenters=(req,res,next)=>
 {
     vacCenter.getAll((err,data)=>
     {
@@ -161,5 +161,5 @@ exports.getVacCenters=(req,res,next)=>
         }else res.send(data);
     });
 };
-
+*/
 
