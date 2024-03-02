@@ -47,7 +47,7 @@ const swaggerOptions = {
         },
         servers:
             [       
-                {url: 'http://localhost:5000/api/v1'}
+                {url: 'http://localhost:' + process.env.PORT +'/api/v1'}
             ],
     },
     apis: ["./routes/*.js"]
