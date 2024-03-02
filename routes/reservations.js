@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router({mergeParams:true});
 
-const {getReservations,getReservation, addReservation, updateReservation, deleteReservation} = require("../controllers/reservation");
+const {getReservations,getReservation, addReservation, updateReservation, deleteReservation} = require("../controllers/reservations");
 
 const {protect,authorize} = require("../middleware/auth");
 
