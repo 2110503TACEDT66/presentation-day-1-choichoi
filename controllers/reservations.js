@@ -26,7 +26,7 @@ exports.getReservations=async (req,res,next)=>
             query=Reservation.find().populate(
                 {
                     path:'shop',
-                    select:'name province tel open_close_time'
+                    select:'name province tel open_time close_time'
                 });
         }
         
@@ -50,7 +50,7 @@ exports.getReservation = async (req,res,next)=>
         const reservation = await Reservation.findById(req.params.id).populate(
             {
                 path:'shop',
-                select:'name description tel open_close_time'
+                select:'name description tel open_time close_time'
             });
         if(!reservation)
         {
