@@ -8,7 +8,7 @@ const {getShop,getShops,createShop,updateShop,deleteShop} = require("../controll
 const {protect,authorize} = require("../middleware/auth");
 
 //go to reservation router
-router.use("/:shopId/reservations/", protect, authorize("admin","shopkeeper"),reservationRouter);
+router.use("/:shopId/reservations/", protect,reservationRouter);
 
 router.route("/").get(getShops).post(protect, authorize("admin","shopkeeper"), createShop);
 router.route("/:id").put(protect, authorize("admin","shopkeeper"), updateShop).get(getShop).delete(protect, authorize("admin","shopkeeper"), deleteShop);
