@@ -31,7 +31,7 @@ const ShopSchema = new mongoose.Schema({
 });
 
 //Reverse populate with virtuals
-HospitalSchema.virtual('reservations',{
+ShopSchema.virtual('reservations',{
     ref: 'Reservation',
     localField: '_id',
     foreignField:'shop',
@@ -39,7 +39,7 @@ HospitalSchema.virtual('reservations',{
 });
 
 //Cascade delete reservations when a shop is deleted
-HospitalSchema.pre('deleteOne',{document:true,query: false}, async function(next){
+ShopSchema.pre('deleteOne',{document:true,query: false}, async function(next){
     console.log(`Reservations being removed from shop ${this._id}`);
     await this.model('Reservation').deleteMany({shop:this._id});
     next();
