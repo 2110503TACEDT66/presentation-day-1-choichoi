@@ -18,7 +18,6 @@ connectDB();
 dotenv.config({path: "./config/config.env"});
 
 //import router file
-const shops = require("./routes/shops");
 const auth = require("./routes/auth");
 const reservations = require("./routes/reservations");
 
@@ -58,7 +57,6 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //routes
 app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs));
-app.use("/api/v1/shops", shops);
 app.use("/api/v1/auth",auth)
 app.use("/api/v1/reservations",reservations);
 
