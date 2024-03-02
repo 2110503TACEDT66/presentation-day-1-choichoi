@@ -2,3 +2,4 @@
 node_modules/*
 #ignore plantuml
 plantuml/*
+config/vacCenterDB.js
