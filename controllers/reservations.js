@@ -90,67 +90,67 @@ exports.addReservation=async (req,res,next)=>
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
         }
 
-        const appointment = await Appointment.create(req.body);
+        const reservation = await Reservation.create(req.body);
 
-        res.status(200).json({success:true,data:appointment});
+        res.status(200).json({success:true,data:reservation});
     }catch(err)
     {
         console.log(err);
 
-        return res.status(500).json({success:false,message:"Cannot create Appointment"});3
+        return res.status(500).json({success:false,message:"Cannot create Reservation"});3
     }
 }
 
-exports.updateAppointment=async (req,res,next)=>
+exports.updateReservation=async (req,res,next)=>
 {
     try
     {
-        let appointment=await Appointment.findById(req.params.id);
-        if(!appointment)
+        let reservation=await Reservation.findById(req.params.id);
+        if(!reservation)
         {
-            return res.status(404).json({success:false,message:`No appointment with the id ofg ${req.params.id}`});
+            return res.status(404).json({success:false,message:`No reservation with the id ofg ${req.params.id}`});
         }
 
-        if(appointment.user.toString()!==req.user.id&&req.user.role!=='admin')
+        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin')
         {
-            return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this appointment`})
+            return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
         }
 
-        appointment = await Appointment.findByIdAndUpdate(req.params.id,req.body,
+        reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,
             {
                 new:true,
                 runValidators:true
             });
 
-        res.status(200).json({success:true,data:appointment});
+        res.status(200).json({success:true,data:reservation});
     }catch(err)
     {
         console.log(err);
-        return res.status(500).json({success:false,message:"Cannot updata Appointment"});
+        return res.status(500).json({success:false,message:"Cannot update Reservation"});
     }
 }
 
-exports.deleteAppointment=async (req,res,next)=>
+exports.deleteReservation=async (req,res,next)=>
 {
     try
     {
-        let appointment=await Appointment.findById(req.params.id);
-        if(!appointment)
+        let reservation=await Reservation.findById(req.params.id);
+        if(!reservation)
         {
-            return res.status(404).json({success:false,message:`No appointment with the id og ${req.params.id}`});
+            return res.status(404).json({success:false,message:`No reservation with the id og ${req.params.id}`});
         }
 
-        if(appointment.user.toString()!==req.user.id&&req.user.role!=='admin')
+        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin')
         {
-            return res.status(401).json({success:false,message:`USer ${req.user.id} is not authorized to delete this`})
+            return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to delete this`})
         }
 
-        await appointment.deleteOne();
+        await reservation.deleteOne();
 
         res.status(200).json({success:true,data:{}});
     }catch(err)
     {
         console.log(err);
-        return res.status(500).json({success:false,message:"Cannot delete Appointment"});
+        return res.status(500).json({success:false,message:"Cannot delete Reservation"});
     }
 }
