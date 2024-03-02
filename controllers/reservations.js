@@ -9,7 +9,7 @@ exports.getReservations=async (req,res,next)=>
         query=Reservation.find({user:req.user.id}).populate(
             {
                 path:'shop',
-                select:'name province tel open_close_time'
+                select:'name province tel open_time close_time'
             });
     }else
     {
@@ -19,7 +19,7 @@ exports.getReservations=async (req,res,next)=>
             query = Reservation.find({shop:req.params.shopId}).populate(
                 {
                     path:"shop",
-                    select:"name province tel open_close_time",
+                    select:"name province tel open_time close_time",
                 });
         }else
         {
