@@ -95,7 +95,7 @@ exports.addReservation=async (req,res,next)=>
         req.body.user = req.user.id;
         const existedReservations = await Reservation.find({user:req.user.id});
 
-        if(existedReservations.length>=3&& req.user.role !== 'admin')
+        if(existedReservations.length>=3&& req.user.role == 'user')
         {
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
         }
@@ -138,7 +138,7 @@ exports.updateReservation=async (req,res,next)=>
             return res.status(404).json({success:false,message:`No reservation with the id ofg ${req.params.id}`});
         }
 
-        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin')
+        if(reservation.user.toString()!==req.user.id&&req.user.role=='user')
         {
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
         }
@@ -167,7 +167,7 @@ exports.deleteReservation=async (req,res,next)=>
             return res.status(404).json({success:false,message:`No reservation with the id og ${req.params.id}`});
         }
 
-        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin')
+        if(reservation.user.toString()!==req.user.id&&req.user.role=='user')
         {
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to delete this`})
         }
