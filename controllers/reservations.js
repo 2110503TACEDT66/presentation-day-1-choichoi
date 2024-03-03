@@ -1,17 +1,19 @@
 const Reservation = require('../models/Reservation');
 const Shop = require('../models/Shop');
+const User = require("../models/User");
 exports.getReservations=async (req,res,next)=>
 {
     let query;
-
-    if(req.user.role !== 'admin')
+    //get as a user
+    if(req.user.role == 'user')
     {
         query=Reservation.find({user:req.user.id}).populate(
             {
                 path:'shop',
                 select:'name province tel open_time close_time'
             });
-    }else
+    //get as an admin
+    }else if(req.user.role == 'admin')
     {
         if(req.params.shopId)
         {
@@ -29,7 +31,14 @@ exports.getReservations=async (req,res,next)=>
                     select:'name province tel open_time close_time'
                 });
         }
-        
+    //get as a shopkeeper
+    }else{
+        const shopkeeper = await User.findById(req.user.id);
+        query = Reservation.find({shop:shopkeeper.manageShop}).populate(
+            {
+                path:"shop",
+                select:"name province tel open_time close_time",
+            });
     }
     try
     {
