@@ -1,10 +1,10 @@
 const Reservation = require('../models/Reservation');
 const Shop = require('../models/Shop');
-const User = require("../models/User");
 exports.getReservations=async (req,res,next)=>
 {
     let query;
     //get as a user
+    console.log(req.user);
     if(req.user.role == 'user')
     {
         query=Reservation.find({user:req.user.id}).populate(
@@ -33,11 +33,10 @@ exports.getReservations=async (req,res,next)=>
         }
     //get as a shopkeeper
     }else{
-        const shopkeeper = await User.findById(req.user.id);
-        if(!shopkeeper.manageShop){
+        if(!req.user.manageShop){
             return res.status(400).json({success:false,msg:"Not managing any shop"})
         }
-        query = Reservation.find({shop:shopkeeper.manageShop}).populate(
+        query = Reservation.find({shop:req.user.manageShop}).populate(
             {
                 path:"shop",
                 select:"name province tel open_time close_time",
@@ -143,6 +142,12 @@ exports.updateReservation=async (req,res,next)=>
 
         if(reservation.user.toString()!==req.user.id&&req.user.role=='user')
         {
+            return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
+        }
+
+        if(req.user.role=='shopkeeper')
+        {
+            let shopkeeper = await User.findById("req.user");
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
         }
         let myDate;

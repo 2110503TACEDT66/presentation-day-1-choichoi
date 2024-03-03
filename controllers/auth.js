@@ -25,14 +25,15 @@ exports.register=async(req,res,next)=>
 {
     try
     {
-        const {name, tel, email, password, role}=req.body;
+        const {name, tel, email, password, role, manageShop}=req.body;
         const user=await User.create(
             {
                 name,
                 tel,
                 email,
                 password,
-                role
+                role,
+                manageShop
             });
 
        //const token=user.getSignedJwtToken();
