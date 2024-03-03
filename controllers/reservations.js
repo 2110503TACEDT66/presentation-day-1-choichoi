@@ -93,20 +93,23 @@ exports.addReservation=async (req,res,next)=>
 
         // check การจองเวลาในอดีต
         if(req.body.date < Date.now()){
-            return res.status(400).json({success:false,message:'Your reservation is not available'});
+            return res.status(400).json({success:false,message:'Cannot make a reservation in the past'});
         }
         
         // check การจองเวลาตอนร้านปิด
-        const myDate = req.body.date;
+        const myDate = new Date(req.body.date);
+        console.log(typeof myDate);
+        
         const hours = myDate.getHours();
         const minutes = myDate.getMinutes();
-        
-        let time =  hours*60+minutes;
-
+        console.log(hours);
+        console.log(minutes);
+        const time =  hours*60+minutes;
+        console.log(time);
         if(time < shop.open_time || time > shop.close_time){
-            return res.status(400).json({success:false,message:'Your reservation is not available'});
+            return res.status(400).json({success:false,message:'The shop is close during your reservation'});
         }
-        
+
 
         const reservation = await Reservation.create(req.body);
 
