@@ -31,6 +31,10 @@ const UserSchema=new mongoose.Schema({
         minlength: 8,
         select: false
     },
+    manageShop:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Shop',
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt:{
