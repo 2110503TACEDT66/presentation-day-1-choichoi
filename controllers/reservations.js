@@ -91,21 +91,18 @@ exports.addReservation=async (req,res,next)=>
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
         }
 
+        const myDate = new Date(req.body.date);
+
         // check การจองเวลาในอดีต
-        if(req.body.date < Date.now()){
+        if(myDate < Date.now()){
             return res.status(400).json({success:false,message:'Cannot make a reservation in the past'});
         }
         
         // check การจองเวลาตอนร้านปิด
-        const myDate = new Date(req.body.date);
-        console.log(typeof myDate);
-        
-        const hours = myDate.getHours();
-        const minutes = myDate.getMinutes();
-        console.log(hours);
-        console.log(minutes);
+        const hours = myDate.getUTCHours();
+        const minutes = myDate.getUTCMinutes(); 
         const time =  hours*60+minutes;
-        console.log(time);
+
         if(time < shop.open_time || time > shop.close_time){
             return res.status(400).json({success:false,message:'The shop is close during your reservation'});
         }
