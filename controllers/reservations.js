@@ -34,6 +34,9 @@ exports.getReservations=async (req,res,next)=>
     //get as a shopkeeper
     }else{
         const shopkeeper = await User.findById(req.user.id);
+        if(!shopkeeper.manageShop){
+            return res.status(400).json({success:false,msg:"Not managing any shop"})
+        }
         query = Reservation.find({shop:shopkeeper.manageShop}).populate(
             {
                 path:"shop",
