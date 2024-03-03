@@ -86,14 +86,14 @@ exports.addReservation=async (req,res,next)=>
         req.body.user = req.user.id;
         const existedReservations = await Reservation.find({user:req.user.id});
 
-        if(existedReservations.length>=3&&req.user.role!=='admin')
+        if(existedReservations.length>=3&& req.user.role !== 'admin')
         {
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
         }
 
         // check การจองเวลาในอดีต
         if(req.body.date < Date.now()){
-            return res.status(400).json({success:false,message:'Your reservation is not available'});
+            return res.status(400).json({success:false,message:'Cannot make a reservation in the past'});
         }
         
         // check การจองเวลาตอนร้านปิด
@@ -104,7 +104,7 @@ exports.addReservation=async (req,res,next)=>
         let time =  hours*60+minutes;
 
         if(time < shop.open_time || time > shop.close_time){
-            return res.status(400).json({success:false,message:'Your reservation is not available'});
+            return res.status(400).json({success:false,message:'The shop is close during your reservation'});
         }
         
 
