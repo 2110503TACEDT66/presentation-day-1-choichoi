@@ -133,6 +133,34 @@ exports.updateReservation=async (req,res,next)=>
         {
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
         }
+        let myDate;
+        let shop;
+
+        if(req.body.date == null){
+            myDate = reservation.date;
+        } 
+        else { myDate = new Date(req.body.date); }
+
+        if(req.body.shop == null){
+            shop = await Shop.findById(reservation.shop);
+        } else { shop = await Shop.findById(req.body.shop); }
+
+
+        // check update เวลาในอดีต
+        if(myDate < Date.now()){
+            return res.status(400).json({success:false,message:'Cannot make a reservation in the past'});
+        }
+        
+        // check update เวลาตอนร้านปิด
+        const hours = myDate.getUTCHours();
+        const minutes = myDate.getUTCMinutes(); 
+        const time =  hours*60+minutes;
+
+        if(time < shop.open_time || time > shop.close_time){
+            return res.status(400).json({success:false,message:'The shop is close during your reservation'});
+        }
+
+    
 
         reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,
             {
@@ -162,7 +190,7 @@ exports.deleteReservation=async (req,res,next)=>
         {
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to delete this`})
         }
-
+    
         await reservation.deleteOne();
 
         res.status(200).json({success:true,data:{}});
