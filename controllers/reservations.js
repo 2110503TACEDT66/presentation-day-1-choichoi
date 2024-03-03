@@ -4,7 +4,6 @@ exports.getReservations=async (req,res,next)=>
 {
     let query;
     //get as a user
-    console.log(req.user);
     if(req.user.role == 'user')
     {
         query=Reservation.find({user:req.user.id}).populate(
@@ -147,8 +146,15 @@ exports.updateReservation=async (req,res,next)=>
 
         if(req.user.role=='shopkeeper')
         {
-            let shopkeeper = await User.findById("req.user");
-            return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to update this reservation`})
+            if(req.body.shop == null){
+                if(reservation.shop.toString() !== req.user.manageShop.toString()){
+                    return res.status(401).json({success:false,message:`Shopkeeper ${req.user.id} is not authorized to update other shop reservation`});
+                }
+            }else if(req.body.shop.toString() == reservation.shop.toString()){
+                if(reservation.shop.toString() !== req.user.manageShop.toString()){
+                    return res.status(401).json({success:false,message:`Shopkeeper ${req.user.id} is not authorized to update other shop reservation`});
+                }
+            }
         }
         let myDate;
         let shop;
@@ -206,6 +212,13 @@ exports.deleteReservation=async (req,res,next)=>
         if(reservation.user.toString()!==req.user.id&&req.user.role=='user')
         {
             return res.status(401).json({success:false,message:`User ${req.user.id} is not authorized to delete this`})
+        }
+
+        if(req.user.role=='shopkeeper')
+        {
+            if(reservation.shop.toString() != req.user.manageShop.toString()){
+                return res.status(401).json({success:false,message:`Shopkeeper ${req.user.id} is not authorized to delete other shop reservation`});
+            }
         }
     
         await reservation.deleteOne();
