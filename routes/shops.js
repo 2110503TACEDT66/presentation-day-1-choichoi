@@ -22,46 +22,37 @@ router.route("/:id").put(protect, authorize("admin","shopkeeper"), updateShop).g
  *            required:
  *                - name
  *                - address
+ *                - tel
+ *                - open_time
+ *                - close_time
  *            properties:
  *                id:
  *                    type: string
  *                    format: uuid
  *                    description: The auto-generated id of the shop
  *                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
- *                ลําดับ:
- *                    type: string
- *                    description: Ordinal number
  *                name:
  *                    type: string
  *                    description: Shop name
  *                address:
  *                    type: string
- *                    description: House No., Street, Road
- *                district:
- *                    type: string
- *                    description: District
- *                province:
- *                    type: string
- *                    description: province
- *                postalcode:
- *                    type: string
- *                    description: 5-digit postal code
+ *                    description: House No., Street, Road, District, Province, Postalcode 
  *                tel:
  *                    type: string
  *                    description: telephone number
- *                region:
- *                    type: string
- *                    description: region
+ *                open_time:
+ *                    type: number
+ *                    description: shop's open time (minutes after midnight)
+ *                close_time:
+ *                    type: number
+ *                    description: shop's close time (minutes after midnight)
  *            example:
  *                id: 609bda561452242d88d36e37
- *                ลําดับ: 121
  *                name: Happy Shop
- *                address: 121 ถ.สุขุมวิท
- *                district: บางนา
- *                province: กรุงเทพมหานคร
- *                postalcode: 10110
+ *                address: 121 ถ.สุขุมวิท บางนา กรุงเทพมหานคร 10110
  *                tel: 02-2187000
- *                region: กรุงเทพมหานคร (Bangkok)
+ *                open_time: 540
+ *                close_time: 1020
  */
 
 /**  
