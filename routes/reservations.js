@@ -13,175 +13,171 @@ router.route("/:id").get(protect,getReservation).put(protect,updateReservation).
  *  @swagger
  *  components:
  *    schemas:
- *        Shop:
+ *        Reservation:
  *            type: object
  *            required:
- *                - name
- *                - address
+ *                - date
+ *                - user
+ *                - shop
  *            properties:
  *                id:
  *                    type: string
  *                    format: uuid
- *                    description: The auto-generated id of the shop
+ *                    description: The auto-generated id of the reservation
  *                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
- *                ลําดับ:
+ *                date:
+ *                    type: date
+ *                    description: date and time of reservation
+ *                user:
  *                    type: string
- *                    description: Ordinal number
- *                name:
+ *                    format: uuid
+ *                    description: The id of user reserving
+ *                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+ *                shop:
  *                    type: string
- *                    description: Shop name
- *                address:
- *                    type: string
- *                    description: House No., Street, Road
- *                district:
- *                    type: string
- *                    description: District
- *                province:
- *                    type: string
- *                    description: province
- *                postalcode:
- *                    type: string
- *                    description: 5-digit postal code
- *                tel:
- *                    type: string
- *                    description: telephone number
- *                region:
- *                    type: string
- *                    description: region
+ *                    format: uuid
+ *                    description: The id of shop getting reserved
+ *                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
  *            example:
  *                id: 609bda561452242d88d36e37
- *                ลําดับ: 121
- *                name: Happy Shop
- *                address: 121 ถ.สุขุมวิท
- *                district: บางนา
- *                province: กรุงเทพมหานคร
- *                postalcode: 10110
- *                tel: 02-2187000
- *                region: กรุงเทพมหานคร (Bangkok)
+ *                date: 2024-02-27T10:22:58.700+00:00
+ *                user: 65dae6d1a42043d962f4baef
+ *                shop: 65debb972103f416afc2358c
  */
 
 /**  
  * @swagger
  *  tags:
- *      name: Shops
- *      description : Shops managing API
+ *      name: Reservations
+ *      description : Reservations managing API
  */
 
 /**
  * @swagger
- *  /shops:   
+ *  /reservations:   
  *   get:
- *      summary: Returns the list of all the shops
- *      tags: [Shops]
+ *      summary: Returns the list of accessible reservations
+ *      tags: [Reservations]
  *      responses:
  *          200:
- *              description: The list of the shops
+ *              description: The list of the reservations
  *              content:
  *                  application/json:
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Shop'
+ *                              $ref: '#/components/schemas/Reservation'
  */
 
 /**
 * @swagger
-* /shops/{id}:
+* /reservations/{id}:
 *   get:
-*       summary: Get the shop by id
-*       tags: [Shops]
+*       summary: Get the reservation by id
+*       tags: [Reservations]
 *       parameters:
 *           - in: path
 *             name: id
 *             schema:
 *               type: string
 *             required: true
-*             description: The shop id
+*             description: The reservation id
 *       responses:
 *           200:
-*                   description: The shop description by id
+*                   description: The reservation description by id
 *                   contents:
 *                       application/json:
 *                           schema:
-*                               $ref: '#/components/schemas/Shop'
+*                               $ref: '#/components/schemas/Reservation'
 *           404:
-*             description: The shop was not found
+*             description: The reservation was not found
+*           500:
+*             description: Some server error
 */
 /**
  * @swagger
- *  /shops:
+ *  /reservations:
  *    post:
- *      summary: Create a new shop
- *      tags: [Shops]
+ *      summary: Create a new reservation
+ *      tags: [Reservations]
  *      requestBody:
  *        required: true
  *        content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Shop'
+ *             $ref: '#/components/schemas/Reservation'
  *      responses:
  *       201:
- *          description: The shop was successfully created
+ *          description: The reservation was successfully created
  *          content:
  *            application/json:
  *              schema:
- *                $ref: '#/components/schemas/Shop'
+ *                $ref: '#/components/schemas/Reservation'
+ *       400:
+ *          description: Invalid reservation
+ *       404:
+ *          description: The shop was not found
  *       500:
- *          description: Some server error
+ *          description: Some error happened
  */
 
 
 /**
 * @swagger
-* /shops/{id}:
+* /reservations/{id}:
 *   put:
-*           summary: Update the shop by the id
-*           tags: [Shops]
+*           summary: Update the reservation by the id
+*           tags: [Reservations]
 *           parameters:
 *             - in: path
 *               name: id
 *               schema:
 *                   type: string
 *               required: true
-*               description: The shop id
+*               description: The reservation id
 *           requestBody:
 *               required: true
 *               content:
 *                   application/json:
 *                       schema:
-*                           $ref: "#/components/schemas/Shop"
+*                           $ref: "#/components/schemas/Reservation"
 *           responses:
 *               200:
-*                   description: The shop was updated
+*                   description: The reservation was updated
 *                   content:
 *                       application/json:
 *                           schema:
-*                               $ref: '#/components/schemas/Shop'
+*                               $ref: '#/components/schemas/Reservation'
 *               404:
-*                   description: The shop was not found
+*                   description: The reservation was not found
 *               500:
 *                   description: Some error happened
 */
 
 /**
 * @swagger
-* /shops/{id}:
+* /reservations/{id}:
 *   delete:
-*       summary: Remove the shop by id
-*       tags: [Shops]
+*       summary: Remove the reservation by id
+*       tags: [Reservations]
 *       parameters:
 *         - in: path
 *           name: id
 *           schema:
 *               type: string
 *           required: true
-*           description: The shop id
+*           description: The reservation id
 *
 *       responses:
 *           200:
-*               description: The shop was deleted
+*               description: The reservation was deleted
+*           401:
+*               description: Not authorized to delete reservation
 *           404:
-*               description: The shop was not found
+*               description: The reservation was not found
+*           500:
+*               description: Some error happened
+*           
 */
 
 module.exports = router
