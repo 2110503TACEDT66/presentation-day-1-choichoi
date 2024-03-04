@@ -1,0 +1,41 @@
+@startuml Manage Reservation (GET ALL)
+
+header Reservation GetAll Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Reservation (GET ALL)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:reservations" as routerReservations
+participant "<<middleware>>\n:auth" as middleware
+participant "<<controllers>>\n:reservations" as controllersReservations
+participant "<<model>>\n:Reservation" as modelReservation
+database "<<MongoDB>>\n:reservations" as ReservationsDatabase
+
+client->server ++:req.get('/reservations')
+server->routerReservations ++:app.use('/reservations',reservations)
+routerReservations -> middleware ++:protect()
+return
+routerReservations -> controllersReservations ++:getReservations()
+alt getAll by user
+    controllersReservations->modelReservation ++:find({user:req.user.id})
+    note left
+        find own reservations
+    end note
+else getAll by shopkeeper
+    controllersReservations->modelReservation ++:find(shop:req.user.manageShop)
+    note left
+        find own shop's reservations
+    end note
+else getAll by admin
+    controllersReservations->modelReservation ++:find()
+    note left
+        find any reservations
+    end note
+end
+modelReservation ->ReservationsDatabase ++: ReservationSchema
+ReservationsDatabase --> modelReservation --: reservations
+controllersReservations <-- modelReservation --:reservations
+controllersReservations->client --:response
+
+@enduml
