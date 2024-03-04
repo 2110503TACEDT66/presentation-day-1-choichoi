@@ -1,7 +1,7 @@
 @startuml
 left to right direction
-package "ChoiChoi Booking"{
-    class "<<Application>>\nChoiChoiReservation" as ChoiChoiService{}
+package "ChoiChoi Reservation"{
+    class "<<Application>>\nChoiChoiService" as ChoiChoiService{}
 
     class "<<Resource>>\nReservations" as ResourceReservations{
         <<GET>> +getReservations():Reservation
@@ -18,7 +18,7 @@ package "ChoiChoi Booking"{
         -date
         -user
         -shop
-        -createdat
+        -createdAt
     }
 
 }

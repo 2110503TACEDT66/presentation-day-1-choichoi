@@ -1,7 +1,7 @@
 @startuml
 left to right direction
 package "ChoiChoi Shop"{
-    class "<<Application>>\nChoiChoiShop" as ChoiChoiService{}
+    class "<<Application>>\nChoiChoiService" as ChoiChoiService{}
 
     class "<<Resource>>\nShops" as ResourceShops{
         <<GET>> +getShops():Shop
