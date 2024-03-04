@@ -109,21 +109,22 @@ exports.updateShop= async (req,res,next)=>
 {
     try{
         
-        const shop = Shop.findById(req.params.id);
+        let shop = await Shop.findById(req.params.id);
         if(!shop)
         {
             return res.status(404).json({success:false,msg:"Shop not found"});
         }
 
-        if(req.user.manageShop !== shop.id && req.user.role=='shopkeeper'){
+        if(req.user.manageShop.toString() !== shop.id && req.user.role=='shopkeeper'){
             return res.status(401).json({success:false,msg:"Not authorized to update other shop"});
         }
 
-        const reservation = Reservation.find({shop:shop.id});
+        const reservation = await Reservation.find({shop:shop.id});
 
-        if(reservation){
+        if(reservation.length>0){
             return res.status(400).json({success:false,msg:"Cannot update shop that has reservation"});
         }
+
 
         shop = await Shop.findByIdAndUpdate(req.params.id, req.body,
             {
@@ -136,6 +137,7 @@ exports.updateShop= async (req,res,next)=>
     
     }catch(err)
     {
+        console.log(err.stack);
         res.status(400).json({success:false});
     }
 
