@@ -1,4 +1,5 @@
 const Shop = require('../models/Shop');
+const Reservation = require('../models/Reservation');
 //const vacCenter = require('../models/VacCenter');
 //@desc Get all shops
 //@route GET /api/v1/shops
@@ -107,15 +108,30 @@ exports.createShop= async (req,res,next)=>
 exports.updateShop= async (req,res,next)=>
 {
     try{
-        const shop = await Shop.findByIdAndUpdate(req.params.id, req.body,
-        {
-            new: true,
-            runValidators: true
-        });
+        
+        const shop = Shop.findById(req.params.id);
         if(!shop)
         {
-            return res.status(400).json({success:false});
+            return res.status(404).json({success:false,msg:"Shop not found"});
         }
+
+        if(req.user.manageShop !== shop.id && req.user.role=='shopkeeper'){
+            return res.status(401).json({success:false,msg:"Not authorized to update other shop"});
+        }
+
+        const reservation = Reservation.find({shop:shop.id});
+
+        if(reservation){
+            return res.status(400).json({success:false,msg:"Cannot update shop that has reservation"});
+        }
+
+        shop = await Shop.findByIdAndUpdate(req.params.id, req.body,
+            {
+                new: true,
+                runValidators: true
+            });
+
+        
         res.status(200).json({success:true, data:shop});
     
     }catch(err)
