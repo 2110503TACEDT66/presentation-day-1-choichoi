@@ -1,0 +1,69 @@
+@startuml Choichoi System Use Case Diagram
+left to right direction
+
+actor "Non-User" as non
+
+actor "User" as user
+
+actor "Shopkeeper" as shopkeeper
+
+actor "Admin" as admin
+
+rectangle "Shop" as Shop {        
+    usecase "View\nShops" as viewShops
+    usecase "View\nShop" as viewShop
+    
+    usecase "Create\nShop" as createShop
+    usecase "Update\nShop" as updateShop
+    usecase "Delete\nShop" as deleteShop
+}
+
+rectangle "Reservation" as reservation {
+    
+    usecase "View\nReservations" as viewReservations
+    usecase "View\nReservation" as viewReservation
+
+    usecase "Create\nReservation" as createReservation
+    usecase "Update\nReservation" as updateReservation
+    usecase "Delete\nReservation" as deleteReservation
+}
+
+
+viewShops -- non
+viewShops -- user
+viewShops -- shopkeeper
+admin -- viewShops
+
+viewShop -- non
+viewShop -- user
+viewShop -- shopkeeper
+admin -- viewShop
+
+admin -- createShop
+
+updateShop -- shopkeeper
+admin -- updateShop
+
+admin -- deleteShop
+
+viewReservations -- user
+viewReservations -- shopkeeper
+admin -- viewReservations
+
+viewReservation -- user
+viewReservation -- shopkeeper
+admin -- viewReservation
+
+createReservation -- user
+createReservation -- shopkeeper
+admin -- createReservation
+
+updateReservation -- user
+updateReservation -- shopkeeper
+admin -- updateReservation
+
+deleteReservation -- user
+deleteReservation -- shopkeeper
+admin -- deleteReservation
+
+@enduml
