@@ -16,11 +16,10 @@ package "ChoiChoi Shop"{
 
     class "<<Representation>>\nShop" as RepresentationShop {
         -name
-        -email
+        -address
         -telephone
-        -role
-        -password
-        -manageShop
+        -open_time
+        -close_time
     }
 
 }
