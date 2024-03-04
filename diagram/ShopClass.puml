@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+package "ChoiChoi Shop"{
+    class "<<Application>>\nChoiChoiService" as ChoiChoiService{}
+
+    class "<<Resource>>\nShops" as ResourceShops{
+        <<GET>> +getShops():Shop
+        <<POST>> +createShop():Shop
+    }
+
+    class "<<Resource>>\nShop" as ResourceShop {
+        <<GET>> +getShop(): Shop
+        <<PUT>> +updateShop(): Shop
+        <<DELETE>> +deleteShop(): void
+    }
+
+    class "<<Representation>>\nShop" as RepresentationShop {
+        -name
+        -address
+        -telephone
+        -open_time
+        -close_time
+    }
+
+}
+
+ChoiChoiService ..> ResourceShops:"/Shops\n<<Path>>"
+ResourceShops ..> ResourceShop: "/{ShopId}\n<<Path>>"
+ResourceShop ..> RepresentationShop: "<<use>>"
+
+
+
+@enduml

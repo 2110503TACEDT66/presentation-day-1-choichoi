@@ -1,0 +1,60 @@
+@startuml
+left to right direction
+package "ChoiChoi Authorization"{
+    class "<<Application>>\nChoiChoiService" as ChoiChoiService{}
+
+    class "<<Resource>>\nAuthorization" as User{
+        
+    }
+
+    class "<<Resource>>\nUser" as RegisterUser {
+        <<POST>> +register(): token
+    }
+
+    class "<<Resource>>\nUser" as LoginUser {
+        <<POST>> +login(): token
+    }
+
+    class "<<Resource>>\nUser" as GetUser {
+        <<GET>> +getMe(): user
+    }
+    class "<<Resource>>\nUser" as LogoutUser {
+        <<POST>> +logout(): void
+    }
+
+    class "<<Representation>>\nUser" as Representation {
+        -name
+        -email
+        -telephone
+        -role
+        -password
+        -manageShop
+    }
+
+    class "<<Representation>>\nUserToken" as Authorization {
+        -token
+    }
+
+}
+
+ChoiChoiService ..> User:"/auth\n<<Path>>"
+
+User ..> RegisterUser: "/register\n<<Path>>"
+User ..> LoginUser: "/login\n<<Path>>"
+User ..> GetUser: "/me\n<<Path>>"
+User ..> LogoutUser: "/logout\n<<Path>>"
+
+
+
+
+RegisterUser ..> Authorization: "<<use>>"
+LoginUser ..> Authorization: "<<create>>"
+GetUser ..> Representation: "<<use>>"
+LogoutUser ..> Authorization: "<<use>>"
+LoginUser ..> Representation: "<<use>>"
+RegisterUser ..> Representation: "<<create>>"
+
+
+
+
+@enduml
