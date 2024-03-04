@@ -10,6 +10,7 @@ participant "<<router>>\n:shops" as routerShops
 participant "<<middleware>>\n:auth" as middleware
 participant "<<controllers>>\n:shops" as controllersShops
 participant "<<model>>\n:Shop" as modelShop
+participant "<<model>>\n:reservations" as modelReservation
 database "<<MongoDB>>\n:shops" as ShopsDatabase
 
 client->server ++:req.put('/shops/:id')
@@ -19,7 +20,17 @@ return
 routerShops->middleware ++:authorize("admin","shopkeeper")
 return
 routerShops -> controllersShops ++:updateShop()
-controllersShops->modelShop ++:findByIdAndUpdate(req.params.id, req.body)
+controllersShops->modelShop ++:findById(req.params.id)
+controllersShops <-- modelShop --:shop
+controllersShops->modelReservation ++:find({shop:shop.id});
+controllersShops <-- modelReservation --:reservation
+alt reservation is empty
+    alt user.manageShop=shop.id
+        controllersShops->modelShop ++:findByIdAndUpdate(req.params.id, req.body)
+    else user.role = "admin"
+        controllersShops->modelShop ++:findByIdAndUpdate(req.params.id, req.body)
+    end
+end
 modelShop ->ShopsDatabase ++: ShopSchema
 ShopsDatabase --> modelShop --: shop
 controllersShops <-- modelShop --:shop
