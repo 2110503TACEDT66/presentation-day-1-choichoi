@@ -62,7 +62,7 @@ exports.getShops= async (req,res,next)=>
             }
         }
 
-        res.status(200).json({success:true,cout:shops.length, pagination, data:shops})
+        res.status(200).json({success:true,count:shops.length, pagination, data:shops})
     }catch(err)
     {
         res.status(400).json({success:false});
@@ -82,7 +82,7 @@ exports.getShop= async (req,res,next)=>
         {
             return res.status(400).json({success:false});
         }
-       res.status(200).json({success:true,data:shop});
+        res.status(200).json({success:true,data:shop});
     }catch(err)
     {
         res.status(400).json({success:false});
@@ -109,7 +109,7 @@ exports.updateShop= async (req,res,next)=>
 {
     try{
         
-        const shop = Shop.findById(req.params.id);
+        let shop = Shop.findById(req.params.id);
         if(!shop)
         {
             return res.status(404).json({success:false,msg:"Shop not found"});
@@ -121,7 +121,7 @@ exports.updateShop= async (req,res,next)=>
 
         const reservation = Reservation.find({shop:shop.id});
 
-        if(reservation){
+        if(reservation.length > 0){
             return res.status(400).json({success:false,msg:"Cannot update shop that has reservation"});
         }
 
@@ -137,6 +137,7 @@ exports.updateShop= async (req,res,next)=>
     }catch(err)
     {
         res.status(400).json({success:false});
+        console.log(err)
     }
 
 }

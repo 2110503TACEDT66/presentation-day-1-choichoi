@@ -24,6 +24,9 @@ const ShopSchema = new mongoose.Schema({
     close_time: {
         type: Number,
         require: [true, 'Please add a close-time']
+    },
+    picture: {
+        type: String
     }
 },{
     toJSON:{virtuals:true},
