@@ -36,7 +36,7 @@ const limiter = rateLimit({
     windowsMs: 10 * 60 * 1000,
     max : 100
 });
-app.use(limiter);
+//app.use(limiter);
 
 const swaggerOptions = {
     swaggerDefinition:{
