@@ -1,0 +1,17 @@
+{
+    "version":2,
+    "name":"massage-reservation-app",
+    "build":[
+        {
+            "src":"server.js",
+            "use":"@vercel/node"
+        }
+    ],
+    "routes":[
+        {
+            "src":"/(.*)**",
+            "dest":"server.js"
+        }
+
+    ]
+}
